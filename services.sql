@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 28 mars 2025 à 12:49
+-- Généré le : jeu. 20 mars 2025 à 18:28
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -52,29 +52,11 @@ INSERT INTO `admins` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `role`) VA
 
 CREATE TABLE `avis` (
   `id` int(11) NOT NULL,
-  `service_nom` varchar(100) NOT NULL,
-  `service_categorie` varchar(50) NOT NULL,
-  `client_nom` varchar(100) NOT NULL,
-  `note` int(11) NOT NULL CHECK (`note` between 1 and 5),
-  `commentaire` text DEFAULT NULL,
-  `date_creation` datetime DEFAULT current_timestamp()
+  `service_name` varchar(255) NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` >= 1 and `rating` <= 5),
+  `review_text` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `avis`
---
-
-INSERT INTO `avis` (`id`, `service_nom`, `service_categorie`, `client_nom`, `note`, `commentaire`, `date_creation`) VALUES
-(1, 'Garde d\'Enfants', 'Services à Domicile', 'Claude', 3, 'Vous êtes les meilleurs, merci pour vos services.', '2025-03-27 17:49:46'),
-(2, 'Électricité', 'Services de Réparation', 'Anonyme', 1, NULL, '2025-03-27 17:54:12'),
-(3, 'Électricité', 'Services de Réparation', 'Anonyme', 2, NULL, '2025-03-27 17:54:18'),
-(4, 'Électricité', 'Services de Réparation', '', 1, NULL, '2025-03-27 18:01:11'),
-(5, 'Électricité', 'Services de Réparation', '', 2, NULL, '2025-03-27 18:01:14'),
-(6, 'Systèmes Électroménagers', 'Services à Domicile', '', 1, NULL, '2025-03-27 18:10:50'),
-(7, 'Systèmes Électroménagers', 'Services à Domicile', '', 2, NULL, '2025-03-27 18:10:52'),
-(8, 'Systèmes Électroménagers', 'Services à Domicile', '', 3, NULL, '2025-03-27 18:10:55'),
-(9, 'Systèmes Électroménagers', 'Services à Domicile', 'Bruce', 3, 'cool, votre générosité et sympathie ', '2025-03-27 18:10:59'),
-(10, 'Réparation d\'Appareils Éléctronique', 'Services de Réparation', '', 1, NULL, '2025-03-27 18:23:17');
 
 -- --------------------------------------------------------
 
@@ -102,8 +84,8 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `telephone`, `email`, `mot_de_passe`, `pays`, `ville`, `sexe`, `newsletter`, `partner_offers`, `created_at`) VALUES
-(1, 'Mugisha ', 'Claude', NULL, 'claudemug4@gmail.com', '$2y$10$0INXt9v7RAYda1cdWcx1v.uXUBQ.0bNJlnRZldt/UQyN6Il/ylAVq', 'Burundi', 'Bujumbura', 'Homme', 1, 0, '2025-03-02 11:45:36'),
-(3, 'Claude', 'Claude', NULL, 'claudemug7@gmail.com', '$2y$10$W6OU3mp5tewYzTkWojVLUOekbZKtqPEq7BUb9cgueKgM.3v5WiHnC', 'Burundi', 'Bujumbura', 'Homme', 1, 0, '2025-03-02 12:20:42');
+(1, 'Claude', 'Mugisha Claude', NULL, 'claudemug4@gmail.com', '$2y$10$0INXt9v7RAYda1cdWcx1v.uXUBQ.0bNJlnRZldt/UQyN6Il/ylAVq', 'Burundi', 'Bujumbura', 'Homme', 1, 0, '2025-03-02 11:45:36'),
+(3, 'Claude', 'Claude', NULL, 'claudemug7@gmail.com', '$2y$10$PPiR.eRjlUIMQzVGhJqHoOLPfA82VqZaWL4bqvMtuow4XBYW47sjW', 'Burundi', 'Bujumbura', 'Homme', 1, 0, '2025-03-02 12:20:42');
 
 -- --------------------------------------------------------
 
@@ -135,8 +117,7 @@ CREATE TABLE `commanddomicile` (
 --
 
 INSERT INTO `commanddomicile` (`id`, `nom_service`, `domaine`, `service`, `other_service`, `request_type`, `request_date`, `user_name`, `user_email`, `user_phone`, `user_address`, `user_comments`, `prix`, `created_at`, `user_id`, `statut`) VALUES
-(2, 'service_a_domicile', 'soins_hygiene_infirmiers', 'soins_infirmiers', '', 'normal', '2025-03-20', 'Claude', 'claudemug4@gmail.com', '76906021', 'Burundi', 'Merci de me repondre au plus vite', 145000.00, '2025-03-02 16:13:12', 1, 'En attente'),
-(8, 'service de reparation', 'Reparation Mecaniques', 'climatisation', '', 'normal', '2025-03-20', 'Claude', 'claudemug4@gmail.com', '0977061222', 'entenne', 'Merci beaucoup', 123000.00, '2025-03-22 15:45:01', 1, 'En attente');
+(2, 'service_a_domicile', 'soins_hygiene_infirmiers', 'soins_infirmiers', '', 'normal', '2025-03-20', 'Claude', 'claudemug4@gmail.com', '76906021', 'Burundi', 'Merci de me repondre au plus vite', 145000.00, '2025-03-02 16:13:12', 1, 'En attente');
 
 -- --------------------------------------------------------
 
@@ -194,16 +175,7 @@ INSERT INTO `historique_connexion` (`id`, `client_id`, `admin_id`, `date_connexi
 (45, 1, NULL, '2025-03-10 22:24:40', 'Claude', 'claudemug4@gmail.com'),
 (46, 1, NULL, '2025-03-10 22:45:33', 'Claude', 'claudemug4@gmail.com'),
 (47, 1, NULL, '2025-03-12 16:52:04', 'Claude', 'claudemug4@gmail.com'),
-(48, NULL, 1, '2025-03-18 16:31:21', 'Mugisha', 'claudemug4@gmail.com'),
-(49, NULL, 1, '2025-03-20 19:50:23', 'Mugisha', 'claudemug4@gmail.com'),
-(50, 1, NULL, '2025-03-20 20:30:34', 'Claude', 'claudemug4@gmail.com'),
-(51, NULL, 1, '2025-03-20 20:42:36', 'Mugisha', 'claudemug4@gmail.com'),
-(52, 1, NULL, '2025-03-22 10:58:14', 'Claude', 'claudemug4@gmail.com'),
-(53, NULL, 1, '2025-03-22 16:47:15', 'Mugisha', 'claudemug4@gmail.com'),
-(54, NULL, 1, '2025-03-28 09:13:39', 'Mugisha', 'claudemug4@gmail.com'),
-(55, 1, NULL, '2025-03-28 09:42:46', 'Claude', 'claudemug4@gmail.com'),
-(56, 1, NULL, '2025-03-28 09:55:00', 'Claude', 'claudemug4@gmail.com'),
-(57, NULL, 4, '2025-03-28 11:48:11', 'Mugisha', 'Mugishabruce@gmail.com');
+(48, NULL, 1, '2025-03-18 16:31:21', 'Mugisha', 'claudemug4@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -496,13 +468,13 @@ ALTER TABLE `themes`
 -- AUTO_INCREMENT pour la table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `clients`
@@ -514,7 +486,7 @@ ALTER TABLE `clients`
 -- AUTO_INCREMENT pour la table `commanddomicile`
 --
 ALTER TABLE `commanddomicile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `historique`
